@@ -6,7 +6,16 @@ pathData = '/Volumes/MMNI_RAID/RAID_MMNI/PSMA_Matlab/PSMA_PETCT_Data/'
 pathCTNiftiTemp = [pathData 'CTNiftiTemp'];
 pathPETNiftiTemp = [pathData 'PETNiftiTemp'];
 
+%List of SUV Thresholds for Metastasis detection
 SUVThresholdList = [2 3.5 5];
+
+%set thresholds for CT Hounsfiled units
+ctBoneThreshold = 270;
+
+
+%Calculate Voxel Volume from standard PET parameters
+voxelVolume = 0.4072 * 0.4072 * 0.3;
+
 
 
 
@@ -30,8 +39,6 @@ subjectFolders(1:2) = [];
 ImageProperties(length(subjectFolders)).PatientID = '';
 
 
-%Calculate Voxel Volume from standard PET parameters
-voxelVolume = 0.4072 * 0.4072 * 0.3;
 
 
 
@@ -93,11 +100,6 @@ for i = 1:length(subjectFolders)
         end
         
     end
-    
-    
-    
-    %set thresholds for CT Hounsfiled units
-    ctBoneThreshold = 270;
     
     
     
