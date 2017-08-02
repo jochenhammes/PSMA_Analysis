@@ -38,34 +38,11 @@ voxelVolume = 0.4072 * 0.4072 * 0.3;
 % Run Through Patient Folders and do the analysis
 for i = 1:length(subjectFolders)
     
-    pathCTDICOM = [pathData subjectFolders(i).name filesep 'CT'];
-    
     % Loop through subfolders to find the final folder containing the
     % all the images
-    finalFolderReached = false;
-    while not(finalFolderReached)
-        CTSubfolders = dir(pathCTDICOM);
-        CTSubfolders(not([CTSubfolders(:).isdir])) = [];
-        CTSubfolders(1:2) = [];
-        if isempty(CTSubfolders)
-            finalFolderReached = true;
-            break
-        end
-        pathCTDICOM = [pathCTDICOM filesep CTSubfolders(1).name];
-    end
+    pathCTDICOM = findFilepathDICOMSlices([pathData subjectFolders(i).name filesep 'CT'])
+    pathPETDICOM = findFilepathDICOMSlices([pathData subjectFolders(i).name filesep 'PET'])
 
-    pathPETDICOM = [pathData subjectFolders(i).name filesep 'PET'];
-    finalFolderReached = false;
-    while not(finalFolderReached)
-        PETSubfolders = dir(pathPETDICOM);
-        PETSubfolders(not([PETSubfolders(:).isdir])) = [];
-        PETSubfolders(1:2) = [];
-        if isempty(PETSubfolders)
-            finalFolderReached = true;
-            break
-        end
-        pathPETDICOM = [pathPETDICOM filesep PETSubfolders(1).name];
-    end
     
     %retrieve Info about Decaydata from Dicom header
     dicomFiles = dir(pathPETDICOM);
