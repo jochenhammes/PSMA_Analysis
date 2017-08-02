@@ -75,6 +75,7 @@ for i = 1:length(subjectFolders)
     injectedDose = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideTotalDose;
     injectionTime = dicomTime2Seconds(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime);
     imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.PerformedProcedureStepStartTime);
+    inPlaneResolution = dicomInfoPET.PixelSpacing;
     
         
     
