@@ -12,6 +12,9 @@ SUVThresholdList = [2 3.5 5];
 %set thresholds for CT Hounsfiled units
 ctBoneThreshold = 270;
 
+%Decide if metastases should be counted and measured
+performClusterAnalysis = true;
+metastasisVolumeThreshold = 20; %roughly 1ml
 
 %Calculate Voxel Volume from standard PET parameters
 voxelVolume = 0.4072 * 0.4072 * 0.3;
@@ -193,6 +196,14 @@ for i = 1:length(subjectFolders)
         ImageProperties(indexVariable).MeanSUVPETposBone = MeanSUVPETBone;
         ImageProperties(indexVariable).SUVHottesBonetVoxel = SUVHottestBoneVoxel;
         ImageProperties(indexVariable).CoordinatesHottestVoxel = ['x=' num2str(xHot) ' y=' num2str(yHot) ' z=' num2str(zHot)];
+        
+        if performClusterAnalysis
+            [BlobCounter, Bloblist] = clusterAnalysisPET(make_nii(petMaskedAboveThreshold), PETThreshold, metastasisVolumeThreshold)
+            ImageProperties(indexVariable).MetastasisCount = BlobCounter;
+            ImageProperties(indexVariable).MeanMetastasisVolume = mean([Bloblist.Volume]) * voxelVolume;
+            ImageProperties(indexVariable).MaxMetastasisVolume = max([Bloblist.Volume]) * voxelVolume;
+            
+        end
         
         
     end
