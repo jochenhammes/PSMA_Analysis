@@ -1,28 +1,33 @@
-%batchAnalyzePSMA_PETCT
+function [ ImageProperties, Bloblist, petMaskedAboveThreshold, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
+
+disp('analyzeSinglePETCT was called successfully');
 
 
+Bloblist = [];
 
-pathData = '/Users/hammesj/Downloads/PSMA_Matlab_Temp/Data/'
+pathData = pathInputFolder;
 pathCTNiftiTemp = [pathData 'CTNiftiTemp'];
 pathPETNiftiTemp = [pathData 'PETNiftiTemp'];
 
 %List of SUV Thresholds for Metastasis detection
-SUVThresholdList = [2 3.5 5];
+SUVThresholdList = SUVThreshold;
 
 %set thresholds for CT Hounsfiled units
-ctBoneThreshold = 270;
+ctBoneThreshold = HUThreshold;
 
 %Decide if metastases should be counted and measured
-performClusterAnalysis = false;
-metastasisVolumeThreshold = 20; %roughly 1ml
+%performClusterAnalysis = false;
+Bloblist = [];
+
+metastasisVolumeThreshold = metastasisVolThreshold; 
 
 %Calculate Voxel Volume from standard PET parameters
-voxelVolume = 0.4072 * 0.4072 * 0.3;
+voxelVolume = voxelVolumePET;
 
 
 %mean SUV in Control Sample (visually PET negative)
-hc_meanSUV = 0.55463886;
-hc_stdevSUV = 0.10156238;
+%hc_meanSUV = 0.55463886;
+%hc_stdevSUV = 0.10156238;
 
 
 
@@ -44,8 +49,6 @@ subjectFolders(1:2) = [];
 
 %preAllocate ImageProperties
 ImageProperties(length(subjectFolders)).PatientID = '';
-
-
 
 
 
@@ -224,7 +227,9 @@ for i = 1:length(subjectFolders)
 end
 
 
-
 %WriteResultsToFile
-writetable(struct2table(ImageProperties), [pathData 'PSMA_BoneAnalysis_MultSUV.csv'])
-disp('Done. Result ist stored in ImageProperties and written to file')
+writetable(struct2table(ImageProperties), [pathData 'PSMA_BoneAnalysis_MultSUV.csv']);
+disp('Done. Result ist stored in ImageProperties and written to file');
+
+end
+

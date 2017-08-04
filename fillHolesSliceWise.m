@@ -7,8 +7,8 @@ yDim = size(inputMatrix, 2);
 zDim = size(inputMatrix, 3);
 
 %prevent skull from being filled
-if zDim > 320
-    zDim = 320
+if zDim > 280
+    zDim = 280;
 end
 
 outputMatrix = inputMatrix;

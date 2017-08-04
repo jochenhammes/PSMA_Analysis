@@ -1,4 +1,4 @@
-function [ Blobcounter Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold)
+function [ Blobcounter, Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold)
 
 
 MatrixSize = size(inputNifti.img);

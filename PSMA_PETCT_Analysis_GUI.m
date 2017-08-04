@@ -22,7 +22,7 @@ function varargout = PSMA_PETCT_Analysis_GUI(varargin)
 
 % Edit the above text to modify the response to help PSMA_PETCT_Analysis_GUI
 
-% Last Modified by GUIDE v2.5 02-Aug-2017 11:29:59
+% Last Modified by GUIDE v2.5 04-Aug-2017 18:03:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -111,3 +111,185 @@ function btnRun_Callback(hObject, eventdata, handles)
 % hObject    handle to btnRun (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function txtHUThreshold_Callback(hObject, eventdata, handles)
+% hObject    handle to txtHUThreshold (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtHUThreshold as text
+%        str2double(get(hObject,'String')) returns contents of txtHUThreshold as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtHUThreshold_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtHUThreshold (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function txtSUVThresholds_Callback(hObject, eventdata, handles)
+% hObject    handle to txtSUVThresholds (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtSUVThresholds as text
+%        str2double(get(hObject,'String')) returns contents of txtSUVThresholds as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtSUVThresholds_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtSUVThresholds (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function txt_meanSUV_Callback(hObject, eventdata, handles)
+% hObject    handle to txt_meanSUV (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txt_meanSUV as text
+%        str2double(get(hObject,'String')) returns contents of txt_meanSUV as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txt_meanSUV_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txt_meanSUV (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function txtStdSUV_Callback(hObject, eventdata, handles)
+% hObject    handle to txtStdSUV (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtStdSUV as text
+%        str2double(get(hObject,'String')) returns contents of txtStdSUV as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtStdSUV_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtStdSUV (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in btnRunAnalysis.
+function btnRunAnalysis_Callback(hObject, eventdata, handles)
+% hObject    handle to btnRunAnalysis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+pathInputFolder = get(handles.txtInputFolder, 'String')
+HUThreshold  = eval(get(handles.txtHUThreshold, 'String'))
+SUVThreshold  = eval(get(handles.txtSUVThresholds, 'String'))
+voxelVolumePET  = eval(get(handles.txtVoxelVolume, 'String'))
+hc_meanSUV  = eval(get(handles.txt_meanSUV, 'String'))
+hc_StdSUV  = eval(get(handles.txtStdSUV, 'String'))
+performClusterAnalysis  = get(handles.chkPerformClusterAnalysis, 'Value')
+metastasisVolThreshold  = eval(get(handles.txtMetastasisVolThreshold, 'String'))
+createVisualOuput  = get(handles.chkCreateVisualOuput, 'Value')
+
+
+[ImageProperties, Bloblist, petMaskedAboveThreshold, ctBoneMask] = analyzePETCT(pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold);
+
+if createVisualOuput
+    %Create MIP in coronal viewing plane
+    petMIP = flipdim(squeeze(max(petMaskedAboveThreshold, [], 2))',1);
+    ctBoneMaskMIP = flipdim(squeeze(max(ctBoneMask, [], 2))',1);
+end
+
+
+
+function txtVoxelVolume_Callback(hObject, eventdata, handles)
+% hObject    handle to txtVoxelVolume (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtVoxelVolume as text
+%        str2double(get(hObject,'String')) returns contents of txtVoxelVolume as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtVoxelVolume_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtVoxelVolume (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in chkPerformClusterAnalysis.
+function chkPerformClusterAnalysis_Callback(hObject, eventdata, handles)
+% hObject    handle to chkPerformClusterAnalysis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of chkPerformClusterAnalysis
+
+
+
+function txtMetastasisVolThreshold_Callback(hObject, eventdata, handles)
+% hObject    handle to txtMetastasisVolThreshold (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtMetastasisVolThreshold as text
+%        str2double(get(hObject,'String')) returns contents of txtMetastasisVolThreshold as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtMetastasisVolThreshold_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtMetastasisVolThreshold (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in chkCreateVisualOuput.
+function chkCreateVisualOuput_Callback(hObject, eventdata, handles)
+% hObject    handle to chkCreateVisualOuput (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of chkCreateVisualOuput
