@@ -20,6 +20,10 @@ metastasisVolumeThreshold = 20; %roughly 1ml
 voxelVolume = 0.4072 * 0.4072 * 0.3;
 
 
+%mean SUV in Control Sample (visually PET negative)
+hc_meanSUV = 0.55463886;
+hc_stdevSUV = 0.10156238;
+
 
 
     %Delete Temp Folders if they are present
