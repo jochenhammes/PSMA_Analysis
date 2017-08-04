@@ -1,6 +1,5 @@
 %batchAnalyzePSMA_PETCT
 
-%Test
 
 pathData = '/home/hammesj/Desktop/hammesj/PSMA_Controls/';
 pathCTNiftiTemp = [pathData 'CTNiftiTemp'];
