@@ -222,11 +222,11 @@ metastasisVolThreshold  = eval(get(handles.txtMetastasisVolThreshold, 'String'))
 createVisualOuput  = get(handles.chkCreateVisualOuput, 'Value')
 
 
-[ImageProperties, Bloblist, petMaskedAboveThreshold, ctBoneMask] = analyzePETCT(pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold);
+[ImageProperties, Bloblist, petAboveThreshold, ctBoneMask] = analyzePETCT(pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold);
 
 if createVisualOuput
     %Create MIP in coronal viewing plane
-    petMIP = flipdim(squeeze(max(petMaskedAboveThreshold, [], 2))',1);
+    petMIP = flipdim(squeeze(max(petAboveThreshold.img, [], 2))',1);
     ctBoneMaskMIP = flipdim(squeeze(max(ctBoneMask, [], 2))',1);
 end
 

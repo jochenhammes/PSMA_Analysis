@@ -1,4 +1,4 @@
-function [ ImageProperties, Bloblist, petOnlyBone, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
+function [ ImageProperties, Bloblist, petAboveThreshold, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
 
 
 Bloblist = [];
