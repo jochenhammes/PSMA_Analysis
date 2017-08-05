@@ -219,15 +219,13 @@ hc_meanSUV  = eval(get(handles.txt_meanSUV, 'String'))
 hc_StdSUV  = eval(get(handles.txtStdSUV, 'String'))
 performClusterAnalysis  = get(handles.chkPerformClusterAnalysis, 'Value')
 metastasisVolThreshold  = eval(get(handles.txtMetastasisVolThreshold, 'String'))
-createVisualOuput  = get(handles.chkCreateVisualOuput, 'Value')
+createVisualOuputIsChecked  = get(handles.chkCreateVisualOuput, 'Value')
 
 
 [ImageProperties, Bloblist, petAboveThreshold, ctBoneMask] = analyzePETCT(pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold);
 
-if createVisualOuput
-    %Create MIP in coronal viewing plane
-    petMIP = flipdim(squeeze(max(petAboveThreshold.img, [], 2))',1);
-    ctBoneMaskMIP = flipdim(squeeze(max(ctBoneMask, [], 2))',1);
+if createVisualOuputIsChecked
+    createVisualOutput(ImageProperties, Bloblist, petAboveThreshold.img, ctBoneMask, pathInputFolder);
 end
 
 
