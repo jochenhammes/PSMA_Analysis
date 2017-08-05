@@ -1,4 +1,8 @@
-function [ Blobcounter, Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold)
+function [Blobcounter, Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold, individualSUVFactor)
+
+if ~exist('individualSUVFactor','var')
+  individualSUVFactor=1;
+end
 
 
 MatrixSize = size(inputNifti.img);
@@ -9,6 +13,9 @@ thresholdedBinaryImage.img = inputNifti.img > petThreshold;
 
 outputImageMask = thresholdedBinaryImage;
 outputImageMask.img = thresholdedBinaryImage.img .* 0;
+
+%initialize temporary Matrix for calculations
+tempMatrix = inputNifti.img;
 
 for i = 2:(MatrixSize(1)-1)
     for j = 2:(MatrixSize(2)-1)
@@ -26,14 +33,13 @@ for i = 2:(MatrixSize(1)-1)
                %outputImageMask.img(i,j,k) = 1;
                outputImageMask.img(ExtractedVoxels) = 1;
                Blobcounter = Blobcounter + 1;
-               
-               
-%                %Calculate max and mean value for current blob
-%                tempMatrix = tempMatrix .*0;
-%                tempMatrix(ExtractedVoxels) = 1;
-%                tempMatrix = tempMatrix .* image.img;
-%                currentMax = max(tempMatrix(:));
-%                currentMean = sum(tempMatrix(:))/nVoxels;
+                       
+               %Calculate max and mean value for current blob
+               tempMatrix = tempMatrix .*0;
+               tempMatrix(ExtractedVoxels) = 1;
+               tempMatrix = tempMatrix .* inputNifti.img;
+               currentMax = max(tempMatrix(:));
+               currentMean = sum(tempMatrix(:))/nVoxels;
                
                %Find geometric center of ExtractedVoxels
                [xCoordinates yCoordinates zCoordinates]=ind2sub(size(ExtractedVoxels),find(ExtractedVoxels == 1));
@@ -41,14 +47,12 @@ for i = 2:(MatrixSize(1)-1)
                
                %Find hottest voxel of ExtractedVoxels
 %               [xHot yHot zHot]=ind2sub(size(tempMatrix),find(tempMatrix == currentMax));
-               
-
-               
+                          
                %Save results to Bloblist
                Bloblist(Blobcounter).Number = Blobcounter;
                Bloblist(Blobcounter).Volume = nVoxels;
-               %Bloblist(Blobcounter).Max = currentMax;
-               %Bloblist(Blobcounter).Mean = currentMean;
+               Bloblist(Blobcounter).Max = currentMax / individualSUVFactor;
+               Bloblist(Blobcounter).Mean = currentMean / individualSUVFactor;
               
           
            end

@@ -199,10 +199,14 @@ for i = 1:length(subjectFolders)
         ImageProperties(indexVariable).CoordinatesHottestVoxel = ['x=' num2str(xHot) ' y=' num2str(yHot) ' z=' num2str(zHot)];
         
         if performClusterAnalysis
-            [BlobCounter, Bloblist] = clusterAnalysisPET(make_nii(petMaskedAboveThreshold), PETThreshold, metastasisVolumeThreshold)
+            [BlobCounter, Bloblist] = clusterAnalysisPET(make_nii(petMaskedAboveThreshold), PETThreshold, metastasisVolumeThreshold, individualSUVFactor);
             ImageProperties(indexVariable).MetastasisCount = BlobCounter;
             ImageProperties(indexVariable).MeanMetastasisVolume = mean([Bloblist.Volume]) * voxelVolume;
             ImageProperties(indexVariable).MaxMetastasisVolume = max([Bloblist.Volume]) * voxelVolume;
+            
+            %Save Bloblist to File
+            writetable(struct2table(Bloblist), [pathData 'Bloblist_SUV_' num2str(SUVThreshold) '_' subjectFolders(i).name '.csv']);
+            disp('Bloblist written to file');
             
         end
         
