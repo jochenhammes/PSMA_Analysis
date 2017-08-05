@@ -1,7 +1,5 @@
 function [ ImageProperties, Bloblist, petOnlyBone, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
 
-disp('analyzeSinglePETCT was called successfully');
-
 
 Bloblist = [];
 

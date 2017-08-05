@@ -53,6 +53,7 @@ for i = 2:(MatrixSize(1)-1)
                Bloblist(Blobcounter).Volume = nVoxels;
                Bloblist(Blobcounter).Max = currentMax / individualSUVFactor;
                Bloblist(Blobcounter).Mean = currentMean / individualSUVFactor;
+               Bloblist(Blobcounter).CenterPoint = currentCenterOfBlob;
               
           
            end
