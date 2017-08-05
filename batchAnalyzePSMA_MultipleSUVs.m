@@ -1,5 +1,7 @@
 %batchAnalyzePSMA_PETCT
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THIS SCRIPT IS DEPRECATED. USE analyzePETCT instead!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 pathData = '/Users/hammesj/Downloads/PSMA_Matlab_Temp/Data/'

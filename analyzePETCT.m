@@ -1,4 +1,4 @@
-function [ ImageProperties, Bloblist, petMaskedAboveThreshold, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
+function [ ImageProperties, Bloblist, petOnlyBone, ctBoneMask] = analyzePETCT( pathInputFolder, HUThreshold, SUVThreshold, hc_meanSUV, hc_StdSUV, voxelVolumePET, performClusterAnalysis, metastasisVolThreshold)
 
 disp('analyzeSinglePETCT was called successfully');
 
@@ -148,7 +148,8 @@ for i = 1:length(subjectFolders)
         
         
         SUVThreshold = SUVThresholdList(j);
-        PETThreshold = SUVThreshold * injectedDose * exp(-log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime)) / (patientWeight * 1000) ;
+        individualSUVFactor = injectedDose * exp(-log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime)) / (patientWeight * 1000);
+        PETThreshold = SUVThreshold * individualSUVFactor;
     
         
         % Voxels in PET above SUV-threshold
@@ -165,8 +166,8 @@ for i = 1:length(subjectFolders)
         SumOfPETAboveThresholdActivity = sum(petMaskedAboveThreshold(:));
         MeanActivityPETBone = SumOfPETAboveThresholdActivity/nnz(petAboveThreshold.img);
         
-        MeanSUVPETBone = MeanActivityPETBone * (patientWeight * 1000) / injectedDose * exp(log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime));
-        
+        %MeanSUVPETBone = MeanActivityPETBone * (patientWeight * 1000) / injectedDose * exp(log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime));
+        MeanSUVPETBone = MeanActivityPETBone / individualSUVFactor;
         
         
         %Remove first and last two slices in z direction to prevent artifacts
@@ -179,16 +180,9 @@ for i = 1:length(subjectFolders)
         [xHot yHot zHot] = ind2sub([xDim yDim zDim], indexOfHottesVoxel);
         
         %SUV of hottest Voxel in Bone
-        SUVHottestBoneVoxel = max(petWithoutBorders.img(:)) * (patientWeight * 1000) / injectedDose * exp(log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime));
+        %SUVHottestBoneVoxel = max(petWithoutBorders.img(:)) * (patientWeight * 1000) / injectedDose * exp(log(2)/nuclideHalfLife * (imageAcquisitionTime-injectionTime));
+        SUVHottestBoneVoxel = max(petWithoutBorders.img(:)) / individualSUVFactor;
         
-        
-        
-        %Output
-        %disp(['Bone Volume: ' num2str(boneVolume) ' ml']);
-        %disp(['Bone Metastasis  Volume: ' num2str(petPosVolume) ' ml']);
-        %disp(['Bone Metastasis in Percent of Bone Volume: ' num2str(numberPETposVoxels/numberBoneVoxels*100) ' %']);
-        %disp(['Mean SUV in Metastases: ' num2str(MeanSUVPETBone)]);
-        %disp(['Coordinates of highest SUV: x=' num2str(xHot) ' y=' num2str(yHot) ' z=' num2str(zHot)]);
         
         
         %Save in ImageProperties
