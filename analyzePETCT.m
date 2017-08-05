@@ -193,6 +193,7 @@ for i = 1:length(subjectFolders)
         ImageProperties(indexVariable).petPosVolume = petPosVolume;
         ImageProperties(indexVariable).percentPetPos = numberPETposVoxels/numberBoneVoxels;
         ImageProperties(indexVariable).MeanSUVPETposBone = MeanSUVPETBone;
+        ImageProperties(indexVariable).Z_MeanSUV = (MeanSUVPETBone-hc_meanSUV) / hc_StdSUV;
         ImageProperties(indexVariable).SUVHottesBonetVoxel = SUVHottestBoneVoxel;
         ImageProperties(indexVariable).CoordinatesHottestVoxel = ['x=' num2str(xHot) ' y=' num2str(yHot) ' z=' num2str(zHot)];
         
