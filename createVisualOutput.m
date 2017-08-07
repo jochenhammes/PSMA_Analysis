@@ -1,6 +1,8 @@
 function [ visualOutput ] = createVisualOutput(ImageProperties, Bloblist, petAboveThreshold, ctBoneMask, outputFolder)
 % Creates Visual Output and stores it in folder
 
+FontSize = 30;
+
 %Create MIP in coronal viewing plane
 petMIP = flipdim(squeeze(max(petAboveThreshold, [], 2))',1);
 ctBoneMaskMIP = flipdim(squeeze(max(ctBoneMask, [], 2))',1);
@@ -37,19 +39,21 @@ currentMeanSUV = num2str(ImageProperties(length(ImageProperties)).MeanSUVPETposB
 currentZ_MeanSUV = num2str(ImageProperties(length(ImageProperties)).Z_MeanSUV,3)
 currentMaxSUV = num2str(ImageProperties(length(ImageProperties)).SUVHottesBonetVoxel,3)
 currentSUVThreshold = num2str(ImageProperties(length(ImageProperties)).SUVThreshold,2)
+currentHUThreshold = num2str(ImageProperties(length(ImageProperties)).HUThreshold,3)
 
-visualOutput = AddTextToImage(visualOutput, currentpatientID, [110 270], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentDateString(1:end-9), [162 270], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentSUVThreshold, [110 1070], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentBoneVolume, [1025 360], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentPetPosVol, [1078 360], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentPercentPetPos, [1131 360], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentMeanSUV, [1184 450], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentZ_MeanSUV, [1237 630], [0 0 0], 'Arial', 16); 
-visualOutput = AddTextToImage(visualOutput, currentMaxSUV, [1290 450], [0 0 0], 'Arial', 16); 
+visualOutput = AddTextToImage(visualOutput, currentpatientID, [110 270], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentDateString(1:end-9), [162 270], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentSUVThreshold, [110 1070], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentHUThreshold, [162 1070], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentBoneVolume, [1025 360], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentPetPosVol, [1078 360], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentPercentPetPos, [1131 360], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentMeanSUV, [1184 450], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentZ_MeanSUV, [1237 630], [0 0 0], 'Arial', FontSize); 
+visualOutput = AddTextToImage(visualOutput, currentMaxSUV, [1290 450], [0 0 0], 'Arial', FontSize); 
 
 if ~isempty(Bloblist)
-    visualOutput = AddTextToImage(visualOutput, num2str(length(Bloblist)), [1343 450], [0 0 0], 'Arial', 16); 
+    visualOutput = AddTextToImage(visualOutput, num2str(length(Bloblist)), [1343 450], [0 0 0], 'Arial', FontSize); 
 end
 
 
