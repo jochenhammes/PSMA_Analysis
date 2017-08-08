@@ -1,7 +1,11 @@
 function [ visualOutput ] = createVisualOutput(ImageProperties, Bloblist, petAboveThreshold, ctBoneMask, outputFolder)
 % Creates Visual Output and stores it in folder
 
-FontSize = 30;
+try 
+    localSettings
+catch
+    FontSize = 30;   
+end
 
 %Create MIP in coronal viewing plane
 petMIP = flipdim(squeeze(max(petAboveThreshold, [], 2))',1);
