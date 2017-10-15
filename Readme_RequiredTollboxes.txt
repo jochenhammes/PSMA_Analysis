@@ -10,6 +10,6 @@ Download:
 http://de.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
 
 
-3) Add Text TO image 
+3) Add Text To image 
 Download:
 https://de.mathworks.com/matlabcentral/fileexchange/40959-add-text-to-image
