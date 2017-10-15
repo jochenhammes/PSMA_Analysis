@@ -8,3 +8,8 @@ http://de.mathworks.com/matlabcentral/fileexchange/42997-dicom-to-nifti-converte
 2) Tools for NIfTI and ANALYZE image 
 Download:
 http://de.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
+
+
+3) Add Text TO image 
+Download:
+https://de.mathworks.com/matlabcentral/fileexchange/40959-add-text-to-image
