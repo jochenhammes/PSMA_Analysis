@@ -1,4 +1,4 @@
-function [Blobcounter, Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold, individualSUVFactor)
+function [Blobcounter, Bloblist] = clusterAnalysisPET(inputNifti, petThreshold, voxelCountThreshold, individualSUVFactor, PatientID, SUVThreshold)
 
 if ~exist('individualSUVFactor','var')
   individualSUVFactor=1;
@@ -49,10 +49,13 @@ for i = 2:(MatrixSize(1)-1)
 %               [xHot yHot zHot]=ind2sub(size(tempMatrix),find(tempMatrix == currentMax));
                           
                %Save results to Bloblist
+               Bloblist(Blobcounter).PatientID = PatientID;
+               Bloblist(Blobcounter).SUVThreshold = SUVThreshold;
                Bloblist(Blobcounter).Number = Blobcounter;
                Bloblist(Blobcounter).Volume = nVoxels;
                Bloblist(Blobcounter).Max = currentMax / individualSUVFactor;
                Bloblist(Blobcounter).Mean = currentMean / individualSUVFactor;
+               Bloblist(Blobcounter).VolTimesMean = currentMean / individualSUVFactor * nVoxels;
                Bloblist(Blobcounter).CenterPoint = currentCenterOfBlob;
               
           

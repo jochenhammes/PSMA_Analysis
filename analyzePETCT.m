@@ -199,7 +199,7 @@ for i = 1:length(subjectFolders)
         
         try
         if performClusterAnalysis
-            [BlobCounter, Bloblist] = clusterAnalysisPET(make_nii(petMaskedAboveThreshold), PETThreshold, metastasisVolumeThreshold, individualSUVFactor);
+            [BlobCounter, Bloblist] = clusterAnalysisPET(make_nii(petMaskedAboveThreshold), PETThreshold, metastasisVolumeThreshold, individualSUVFactor, subjectFolders(i).name, SUVThreshold);
             ImageProperties(indexVariable).MetastasisCount = BlobCounter;
             ImageProperties(indexVariable).MeanMetastasisVolume = mean([Bloblist.Volume]) * voxelVolume;
             ImageProperties(indexVariable).MaxMetastasisVolume = max([Bloblist.Volume]) * voxelVolume;

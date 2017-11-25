@@ -1,6 +1,6 @@
 
 
-pathData = '/home/hammesj/Desktop/hammesj/PSMA_VisualRating//';
+pathData = '/Users/hammesj/Downloads/PSMA_Matlab_Temp/PSMA_TherapyRating/';
 
 
 %Find alls folders in pathData, then remove . and .. (first two entries)
