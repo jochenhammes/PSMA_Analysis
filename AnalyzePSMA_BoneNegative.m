@@ -238,5 +238,5 @@ end
 
 
 %WriteResultsToFile
-writetable(struct2table(ImageProperties), [pathData 'PSMA_HealthyBoneUptake.csv'])
+writetable(struct2table(ImageProperties), [pathData 'PSMA_TracerComparison_Results.csv'])
 disp('Done. Result ist stored in ImageProperties and written to file')
