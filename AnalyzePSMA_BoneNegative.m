@@ -1,7 +1,7 @@
 %batchAnalyzePSMA_PETCT
 
 
-pathData = '/media/mmni_raid2/Filesystem/hammesj/PSMA_Tracervergleich/';
+pathData = '/Volumes/Untitled/PSMA_Tracervergleich/';
 pathCTNiftiTemp = [pathData 'CTNiftiTemp'];
 pathPETNiftiTemp = [pathData 'PETNiftiTemp'];
 
@@ -62,7 +62,8 @@ for i = 1:length(subjectFolders)
     nuclideHalfLife = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideHalfLife;
     injectedDose = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideTotalDose;
     injectionTime = dicomTime2Seconds(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime);
-    imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.PerformedProcedureStepStartTime);
+    %imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.PerformedProcedureStepStartTime);
+    imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.AcquisitionTime);
     inPlaneResolution = dicomInfoPET.PixelSpacing;
     
         
@@ -128,6 +129,9 @@ for i = 1:length(subjectFolders)
     % fill holes in bone mask
     ctBoneMask = fillHolesSliceWise(ctBoneMask);
     
+    %Remove upper 75 Slices to exclude Skull
+    ctBoneMask(:,:,(zDim-70):zDim) = false;
+    
     % Mask PET image with ctBoneMask
     petOnlyBone = pet412;
     petOnlyBone.img = petOnlyBone.img .* ctBoneMask;
@@ -153,23 +157,24 @@ for i = 1:length(subjectFolders)
         % Voxels in PET above minimal SUV-threshold and below max SUV-Threshold
         petBelowMaxSUVThrehsold = petOnlyBone;
         petBelowMaxSUVThrehsold.img = petAboveThreshold.img .* pet412.img;
-        petBelowMaxSUVThrehsold.img = single(petBelowMaxSUVThrehsold.img < PETMaxThreshold);
+        petBelowMaxSUVThrehsold.img = single(petBelowMaxSUVThrehsold.img < PETMaxThreshold & petOnlyBone.img > PETThreshold);
         
                 
         numberPETposVoxels = nnz(petAboveThreshold.img);
         petPosVolume = numberPETposVoxels * voxelVolume;
         
-        %Mean Activity in PET-positive Voxels
+        
         petMaskedAboveThreshold = pet412.img .* petAboveThreshold.img;
  
-        %Mean Activity in PET-positive Voxels (below SUV Max Threshold)
         petMaskedBelowSUVMaxThreshold = pet412.img .* petBelowMaxSUVThrehsold.img;
 
         
+        %Mean Activity in PET-positive Voxels
         SumOfPETAboveThresholdActivity = sum(petMaskedAboveThreshold(:));
         MeanActivityPETBone = SumOfPETAboveThresholdActivity/nnz(petAboveThreshold.img);
         
         
+        %Mean Activity in PET-positive Voxels (below SUV Max Threshold)
         SumOfPETBelowMaxThresholdActivity = sum(petMaskedBelowSUVMaxThreshold(:));
         MeanActivityPETBoneBelowSUVMaxThreshold = SumOfPETBelowMaxThresholdActivity/nnz(petMaskedBelowSUVMaxThreshold);
         
