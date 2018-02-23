@@ -61,9 +61,16 @@ for i = 1:length(subjectFolders)
     patientWeight = dicomInfoPET.PatientWeight;
     nuclideHalfLife = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideHalfLife;
     injectedDose = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideTotalDose;
+        
     injectionTime = dicomTime2Seconds(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime);
-    %imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.PerformedProcedureStepStartTime);
     imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.AcquisitionTime);
+    
+    %Check for time discrepancy (Acquisition after 0:00 a.m. while
+    %injection was before 0:00 a.m.)
+    if str2num(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime(1:2)) > str2num(dicomInfoPET.AcquisitionTime(1:2))
+        imageAcquisitionTime = imageAcquisitionTime + 24*3600;
+    end 
+    
     inPlaneResolution = dicomInfoPET.PixelSpacing;
     
         
