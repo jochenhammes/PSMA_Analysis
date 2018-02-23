@@ -1,7 +1,7 @@
 %batchAnalyzePSMA_PETCT
 
 
-pathData = '/Users/hammesj/Downloads/PSMA_Uro/';
+pathData = '/media/mmni_raid2/Filesystem/hammesj/PSMA_Tracervergleich/';
 pathCTNiftiTemp = [pathData 'CTNiftiTemp'];
 pathPETNiftiTemp = [pathData 'PETNiftiTemp'];
 
