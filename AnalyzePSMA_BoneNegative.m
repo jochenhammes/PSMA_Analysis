@@ -62,12 +62,12 @@ for i = 1:length(subjectFolders)
     nuclideHalfLife = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideHalfLife;
     injectedDose = dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadionuclideTotalDose;
         
-    injectionTime = dicomTime2Seconds(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime);
+    injectionTime = dicomTime2Seconds(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartDatetime);
     imageAcquisitionTime = dicomTime2Seconds(dicomInfoPET.AcquisitionTime);
     
     %Check for time discrepancy (Acquisition after 0:00 a.m. while
     %injection was before 0:00 a.m.)
-    if str2num(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartTime(1:2)) > str2num(dicomInfoPET.AcquisitionTime(1:2))
+    if str2num(dicomInfoPET.RadiopharmaceuticalInformationSequence.Item_1.RadiopharmaceuticalStartDatetime(1:2)) > str2num(dicomInfoPET.AcquisitionTime(1:2))
         imageAcquisitionTime = imageAcquisitionTime + 24*3600;
     end 
     
@@ -212,6 +212,9 @@ for i = 1:length(subjectFolders)
         ImageProperties(indexVariable).HUThreshold = ctBoneThreshold;
         ImageProperties(indexVariable).BoneVolume = boneVolume;
         ImageProperties(indexVariable).InjectedDose = injectedDose;
+        ImageProperties(indexVariable).patientWeight = patientWeight;
+        ImageProperties(indexVariable).SUVFactor = PETThreshold/SUVThreshold;
+        ImageProperties(indexVariable).SecondsBetweenInjAndAcq = imageAcquisitionTime-injectionTime;        
         ImageProperties(indexVariable).SUVThreshold = SUVThreshold;
         ImageProperties(indexVariable).petPosVolume = petPosVolume;
         ImageProperties(indexVariable).percentPetPos = numberPETposVoxels/numberBoneVoxels;
